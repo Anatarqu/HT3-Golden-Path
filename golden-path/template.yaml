@@ -17,9 +17,6 @@ metadata:
     - golden-path
 
 spec:
-  # ================================================================
-  # INFORMACIÓN DEL TEMPLATE
-  # ================================================================
   owner: group:default/platform-engineering
   type: service
 
@@ -28,9 +25,6 @@ spec:
   # ================================================================
   parameters:
 
-    # --------------------------------------------------------------
-    # Información del microservicio
-    # --------------------------------------------------------------
     - title: "Información del Microservicio"
       required:
         - serviceName
@@ -62,9 +56,10 @@ spec:
                 - User
           ui:help: "Selecciona el equipo o usuario propietario del servicio"
 
-    # --------------------------------------------------------------
-    # Repositorio GitHub
-    # --------------------------------------------------------------
+    # ================================================================
+    # REPOSITORIO GITHUB
+    # ================================================================
+
     - title: "Repositorio GitHub"
       required:
         - repoUrl
@@ -74,7 +69,9 @@ spec:
         repoUrl:
           title: "Repositorio GitHub"
           type: string
-          description: "Repositorio donde se publicará el microservicio."
+          description: >
+            Selecciona la organización o usuario de GitHub y define
+            el nombre del repositorio.
           ui:field: RepoUrlPicker
           ui:options:
             allowedHosts:
@@ -88,6 +85,7 @@ spec:
     # --------------------------------------------------------------
     # PASO 1 - Descargar skeleton
     # --------------------------------------------------------------
+
     - id: fetchBase
       name: "Descargar y parametrizar el skeleton"
       action: fetch:template
@@ -100,20 +98,27 @@ spec:
           owner: ${{ parameters.owner }}
 
     # --------------------------------------------------------------
-    # PASO 2 - Publicar en GitHub
+    # PASO 2 - PUBLICAR EN GITHUB
     # --------------------------------------------------------------
-    - id: publish-github
+
+    - id: publishGithub
       name: "Publicar en GitHub"
       action: publish:github
+
       input:
-        repoUrl: ://github.com{{ parameters.serviceName }}
-        description: 'Microservicio base creado desde Backstage'
+        repoUrl: ${{ parameters.repoUrl }}
+
+        description: >
+          Microservicio ${{ parameters.serviceName }}
+          creado desde Backstage mediante Golden Path.
+
         repoVisibility: private
         defaultBranch: main
 
     # --------------------------------------------------------------
-    # PASO 3 - Registrar en Backstage
+    # PASO 3 - REGISTRAR EN BACKSTAGE
     # --------------------------------------------------------------
+
     - id: registerCatalog
       name: "Registrar en el Software Catalog"
       action: catalog:register
