@@ -1,14 +1,10 @@
-# =====================================================================
-# TEMPLATE BACKSTAGE - MICROSERVICIO NODEJS
-# =====================================================================
-
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 
 metadata:
   name: microservicio-nodejs
-  title: "Microservicio NodeJS — Seguro por Defecto"
-  description: "Golden Path para crear un nuevo microservicio NodeJS, publicarlo en GitHub y registrarlo en Backstage."
+  title: "Microservicio NodeJS"
+  description: "Golden Path para crear y publicar un microservicio NodeJS en GitHub."
   tags:
     - nodejs
     - microservicio
@@ -18,11 +14,11 @@ spec:
   owner: user:default/guest
   type: service
 
-  # ===================================================================
-  # PARAMETERS
-  # ===================================================================
-
   parameters:
+
+    # ================================================================
+    # INFORMACION DEL MICROSERVICIO
+    # ================================================================
 
     - title: "Información del Microservicio"
       required:
@@ -34,16 +30,16 @@ spec:
         serviceName:
           title: "Nombre del Microservicio"
           type: string
-          description: "Nombre único del microservicio."
+          description: "Nombre del repositorio y del microservicio."
           maxLength: 50
           pattern: "^[a-z0-9-]+$"
           ui:autofocus: true
-          ui:help: "Usa minúsculas, números y guiones. Ej: prueba-conexion"
+          ui:help: "Usa minúsculas, números y guiones. Ejemplo: prueba-conexion"
 
         owner:
           title: "Propietario"
           type: string
-          description: "Usuario o equipo responsable del microservicio."
+          description: "Usuario o grupo responsable del microservicio."
           ui:field: OwnerPicker
           ui:options:
             catalogFilter:
@@ -51,9 +47,9 @@ spec:
                 - Group
                 - User
 
-    # =================================================================
+    # ================================================================
     # REPOSITORIO GITHUB
-    # =================================================================
+    # ================================================================
 
     - title: "Repositorio GitHub"
       required:
@@ -64,21 +60,26 @@ spec:
         repoUrl:
           title: "Repositorio GitHub"
           type: string
-          description: "Selecciona dónde crear el repositorio."
+          description: "Selecciona el propietario y el nombre del repositorio."
+
           ui:field: RepoUrlPicker
+
           ui:options:
             allowedHosts:
               - github.com
 
-  # ===================================================================
+            allowedOwners:
+              - Anatarqu
+
+  # ================================================================
   # STEPS
-  # ===================================================================
+  # ================================================================
 
   steps:
 
-    # -----------------------------------------------------------------
+    # ================================================================
     # 1. DESCARGAR SKELETON
-    # -----------------------------------------------------------------
+    # ================================================================
 
     - id: fetchBase
       name: "Descargar skeleton"
@@ -91,9 +92,9 @@ spec:
           serviceName: ${{ parameters.serviceName }}
           owner: ${{ parameters.owner }}
 
-    # -----------------------------------------------------------------
-    # 2. PUBLICAR EN GITHUB
-    # -----------------------------------------------------------------
+    # ================================================================
+    # 2. CREAR REPOSITORIO EN GITHUB
+    # ================================================================
 
     - id: publishGithub
       name: "Crear repositorio en GitHub"
@@ -108,9 +109,9 @@ spec:
 
         defaultBranch: main
 
-    # -----------------------------------------------------------------
+    # ================================================================
     # 3. REGISTRAR EN BACKSTAGE
-    # -----------------------------------------------------------------
+    # ================================================================
 
     - id: registerCatalog
       name: "Registrar componente en Backstage"
@@ -118,20 +119,21 @@ spec:
 
       input:
         repoContentsUrl: ${{ steps.publishGithub.output.repoContentsUrl }}
+
         catalogInfoPath: /catalog-info.yaml
 
-  # ===================================================================
+  # ================================================================
   # OUTPUT
-  # ===================================================================
+  # ================================================================
 
   output:
 
     links:
 
-      - title: "Repositorio GitHub"
+      - title: "Ver repositorio en GitHub"
         url: ${{ steps.publishGithub.output.remoteUrl }}
         icon: github
 
-      - title: "Componente en Backstage"
+      - title: "Ver componente en Backstage"
         entityRef: ${{ steps.registerCatalog.output.entityRef }}
         icon: catalog
