@@ -102,20 +102,13 @@ spec:
     # --------------------------------------------------------------
     # PASO 2 - Publicar en GitHub
     # --------------------------------------------------------------
-    - id: publishGithub
+    - id: publish-github
       name: "Publicar en GitHub"
       action: publish:github
-
       input:
-        repoUrl: ${{ parameters.repoUrl }}
-
-        description: >
-          Repositorio para el microservicio
-          ${{ parameters.serviceName }}
-          creado vía Golden Path.
-
+        repoUrl: ://github.com{{ parameters.serviceName }}
+        description: "Repositorio para el microservicio creado via Golden Path" # <-- CAMBIA ESTA LÍNEA EXACTAMENTE ASÍ
         repoVisibility: private
-
         defaultBranch: main
 
     # --------------------------------------------------------------
