@@ -1,7 +1,7 @@
 {
   "name": "${{ values.serviceName }}",
   "version": "1.0.0",
-  "description": "Microservicio generado via Backstage Golden Path",
+  "description": "Microservicio NodeJS generado via Backstage Golden Path",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
