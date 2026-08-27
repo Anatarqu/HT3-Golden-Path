@@ -3,6 +3,7 @@ kind: Component
 
 metadata:
   name: ${{ values.serviceName }}
+
   description: "Microservicio ${{ values.serviceName }} - generado via Backstage Golden Path"
 
   annotations:
