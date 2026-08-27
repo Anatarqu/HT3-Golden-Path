@@ -3,8 +3,7 @@ kind: Component
 
 metadata:
   name: ${{ values.serviceName }}
-
-  description: "Microservicio ${{ values.serviceName }} - generado via Backstage Golden Path"
+  description: "Microservicio ${{ values.serviceName }} - generado mediante Backstage Golden Path"
 
   annotations:
     github.com/project-slug: Anatarqu/${{ values.serviceName }}
@@ -13,6 +12,7 @@ metadata:
   tags:
     - nodejs
     - microservicio
+    - golden-path
 
 spec:
   type: service
