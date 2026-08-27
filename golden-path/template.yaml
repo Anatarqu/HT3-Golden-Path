@@ -107,7 +107,7 @@ spec:
       action: publish:github
       input:
         repoUrl: ://github.com{{ parameters.serviceName }}
-        description: "Repositorio para el microservicio creado via Golden Path" # <-- CAMBIA ESTA LÍNEA EXACTAMENTE ASÍ
+        description: 'Microservicio base creado desde Backstage'
         repoVisibility: private
         defaultBranch: main
 
