@@ -1,3 +1,5 @@
+Ejercicios o Pruguntas Repondidas
+
 # Fase 2: Construcción del Golden Path
 
 El objetivo es investigar la anatomía de los Software Templates de Backstage y construir tu propio Golden Path para crear microservicios NodeJS de forma automatizada.
