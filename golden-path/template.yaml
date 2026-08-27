@@ -4,20 +4,20 @@ kind: Template
 metadata:
   name: microservicio-nodejs
   title: "Microservicio NodeJS"
-  description: "Golden Path para crear y publicar un microservicio NodeJS en GitHub."
+  description: "Golden Path para crear un microservicio NodeJS y publicarlo en GitHub."
   tags:
     - nodejs
     - microservicio
     - golden-path
 
 spec:
-  owner: user:default/guest
+  owner: group:default/owner
   type: service
 
   parameters:
 
     # ================================================================
-    # INFORMACION DEL MICROSERVICIO
+    # INFORMACIÓN DEL MICROSERVICIO
     # ================================================================
 
     - title: "Información del Microservicio"
@@ -30,46 +30,22 @@ spec:
         serviceName:
           title: "Nombre del Microservicio"
           type: string
-          description: "Nombre del repositorio y del microservicio."
+          description: "Nombre único del microservicio."
           maxLength: 50
           pattern: "^[a-z0-9-]+$"
           ui:autofocus: true
-          ui:help: "Usa minúsculas, números y guiones. Ejemplo: prueba-conexion"
+          ui:help: "Ejemplo: prueba-conexion"
 
         owner:
           title: "Propietario"
           type: string
-          description: "Usuario o grupo responsable del microservicio."
+          description: "Equipo o usuario propietario del servicio."
           ui:field: OwnerPicker
           ui:options:
             catalogFilter:
               kind:
                 - Group
                 - User
-
-    # ================================================================
-    # REPOSITORIO GITHUB
-    # ================================================================
-
-    - title: "Repositorio GitHub"
-      required:
-        - repoUrl
-
-      properties:
-
-        repoUrl:
-          title: "Repositorio GitHub"
-          type: string
-          description: "Selecciona el propietario y el nombre del repositorio."
-
-          ui:field: RepoUrlPicker
-
-          ui:options:
-            allowedHosts:
-              - github.com
-
-            allowedOwners:
-              - Anatarqu
 
   # ================================================================
   # STEPS
@@ -93,7 +69,7 @@ spec:
           owner: ${{ parameters.owner }}
 
     # ================================================================
-    # 2. CREAR REPOSITORIO EN GITHUB
+    # 2. CREAR REPOSITORIO GITHUB
     # ================================================================
 
     - id: publishGithub
@@ -101,12 +77,9 @@ spec:
       action: publish:github
 
       input:
-        repoUrl: ${{ parameters.repoUrl }}
-
+        repoUrl: github.com?owner=Anatarqu&repo=${{ parameters.serviceName }}
         description: "Microservicio ${{ parameters.serviceName }} creado desde Backstage."
-
         repoVisibility: private
-
         defaultBranch: main
 
     # ================================================================
@@ -119,7 +92,6 @@ spec:
 
       input:
         repoContentsUrl: ${{ steps.publishGithub.output.repoContentsUrl }}
-
         catalogInfoPath: /catalog-info.yaml
 
   # ================================================================
