@@ -21,6 +21,7 @@ spec:
     # ================================================================
 
     - title: "Información del Microservicio"
+
       required:
         - serviceName
         - owner
@@ -34,18 +35,43 @@ spec:
           maxLength: 50
           pattern: "^[a-z0-9-]+$"
           ui:autofocus: true
-          ui:help: "Ejemplo: prueba-conexion"
+          ui:help: "Usa minúsculas, números y guiones. Ejemplo: prueba-conexion"
 
         owner:
           title: "Propietario"
           type: string
-          description: "Equipo o usuario propietario del servicio."
+          description: "Equipo o usuario responsable del microservicio."
           ui:field: OwnerPicker
           ui:options:
             catalogFilter:
               kind:
                 - Group
                 - User
+
+    # ================================================================
+    # REPOSITORIO GITHUB
+    # ================================================================
+
+    - title: "Repositorio GitHub"
+
+      required:
+        - repoUrl
+
+      properties:
+
+        repoUrl:
+          title: "Repositorio GitHub"
+          type: string
+          description: "Selecciona el propietario y nombre del repositorio."
+
+          ui:field: RepoUrlPicker
+
+          ui:options:
+            allowedHosts:
+              - github.com
+
+            allowedOwners:
+              - Anatarqu
 
   # ================================================================
   # STEPS
@@ -54,7 +80,7 @@ spec:
   steps:
 
     # ================================================================
-    # 1. DESCARGAR SKELETON
+    # 1. DESCARGAR Y PARAMETRIZAR SKELETON
     # ================================================================
 
     - id: fetchBase
@@ -69,7 +95,7 @@ spec:
           owner: ${{ parameters.owner }}
 
     # ================================================================
-    # 2. CREAR REPOSITORIO GITHUB
+    # 2. CREAR REPOSITORIO EN GITHUB
     # ================================================================
 
     - id: publishGithub
@@ -77,9 +103,12 @@ spec:
       action: publish:github
 
       input:
-        repoUrl: github.com?owner=Anatarqu&repo=${{ parameters.serviceName }}
+        repoUrl: ${{ parameters.repoUrl }}
+
         description: "Microservicio ${{ parameters.serviceName }} creado desde Backstage."
+
         repoVisibility: private
+
         defaultBranch: main
 
     # ================================================================
@@ -92,6 +121,7 @@ spec:
 
       input:
         repoContentsUrl: ${{ steps.publishGithub.output.repoContentsUrl }}
+
         catalogInfoPath: /catalog-info.yaml
 
   # ================================================================
